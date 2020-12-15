@@ -1,5 +1,159 @@
 #include <iostream>
 
+class MyDoubleLinkedList {
+private:
+    class Node {
+    public:
+        int val;
+        Node *prev, *next;
+        Node(int val):val(val), prev(nullptr), next(nullptr) {}
+        Node(int val, Node *prev, Node *next): val(val), prev(prev), next(next) {}
+    };
+
+    Node *dummyHead;
+
+public:
+    MyDoubleLinkedList() {
+        dummyHead = new Node(-1);
+    }
+
+    int get(int index) {
+        Node *cur = dummyHead->next;
+        for (int i = 0; i < index && cur; ++i) {
+            cur = cur->next;
+        }
+
+        if (cur == nullptr) return -1;
+
+        return cur->val;
+    }
+
+    void addAtHead(int val) {
+        dummyHead->next = new Node(val, dummyHead, dummyHead->next);
+    }
+
+    void addAtTail(int val) {
+        Node *cur = dummyHead->next;
+        while (cur->next) {
+            cur = cur->next;
+        }
+
+        cur->next = new Node(val, cur->next, nullptr);
+    }
+
+    void addAtIndex(int index, int val) {
+
+        Node *prev = dummyHead;
+        for (int i = 0; i < index && prev; i++)
+            prev = prev->next;
+
+        if (prev)
+            prev->next = new Node(val, prev, prev->next);
+    }
+
+    void deleteAtIndex(int index) {
+
+        Node *prev = dummyHead;
+        for (int i = 0; i < index && prev; i++)
+            prev = prev->next;
+
+        if (prev && prev->next) {
+            Node *delNode = prev->next;
+            prev->next = delNode->next;
+            if (prev->next)
+                delNode->next->prev = prev;
+            delete delNode;
+        }
+    }
+};
+
+/**
+ *  起点是哑结点，i = 0; i < index; i++，就表示是prev结点
+ *  起点是链表头结点，i = 0; i < index; i++，表示当前结点
+ */
+class MyLinkedList {
+private:
+    class Node {
+    public:
+        int val;
+        Node *next;
+        Node(int val, Node *next) : val(val), next(next) {}
+        Node(int val): val(val), next(nullptr) {}
+    };
+
+    Node *dummyHead;
+public:
+    /** Initialize your data structure here. */
+    MyLinkedList() {
+        dummyHead = new Node(-1);
+    }
+
+    /** Get the value of the index-th node in the linked list. If the index is invalid, return -1. */
+    int get(int index) {
+
+        Node* cur = dummyHead->next;
+        for (int i = 0; i < index && cur; ++i) {
+            cur = cur->next;
+        }
+        if (!cur) return -1;
+
+        return cur->val;
+    }
+
+    /** Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list. */
+    void addAtHead(int val) {
+        dummyHead->next = new Node(val, dummyHead->next);
+    }
+
+    /** Append a node of value val to the last element of the linked list. */
+    void addAtTail(int val) {
+
+        Node *cur = dummyHead->next;
+        while (cur->next) {
+            cur = cur->next;
+        }
+        cur->next = new Node(val);
+    }
+
+    /** Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted. */
+    void addAtIndex(int index, int val) {
+
+        Node *prev = dummyHead;
+
+        for (int i = 0; i < index && prev; ++i) {
+            prev = prev->next;
+        }
+
+        if (prev)
+            prev->next = new Node(val, prev->next);
+    }
+
+    /** Delete the index-th node in the linked list, if the index is valid. */
+    void deleteAtIndex(int index) {
+
+        Node *pre = dummyHead;
+        for (int i = 0; i < index && pre; ++i) {
+            pre = pre->next;
+        }
+
+        if (pre && pre->next) {
+            Node *delNode = pre->next;
+            pre->next = pre->next->next;
+            delete delNode;
+        }
+    }
+};
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList* obj = new MyLinkedList();
+ * int param_1 = obj->get(index);
+ * obj->addAtHead(val);
+ * obj->addAtTail(val);
+ * obj->addAtIndex(index,val);
+ * obj->deleteAtIndex(index);
+ */
+
 struct ListNode {
     int val;
     ListNode *next;

@@ -3,4 +3,4 @@ project(list)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(list main.cpp)
+add_executable(list main3.cpp)
